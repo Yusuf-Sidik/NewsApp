@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.android.newsapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.android.newsapp"
