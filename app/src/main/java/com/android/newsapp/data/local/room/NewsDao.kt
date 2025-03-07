@@ -13,14 +13,14 @@ interface NewsDao {
     fun getBookmarkedNews(): LiveData<List<NewsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertNews(news: List<NewsEntity>)
+    suspend fun insertNews(news: List<NewsEntity>) //menambahkan suspend
 
     @Update
-    suspend fun updateNews(news: NewsEntity)
+    suspend fun updateNews(news: NewsEntity) //menambahkan suspend
 
     @Query("DELETE FROM news WHERE bookmarked = 0")
-    suspend fun deleteAll()
+    suspend fun deleteAll() //menambahkan suspend
 
     @Query("SELECT EXISTS(SELECT * FROM news WHERE title = :title AND bookmarked = 1)")
-    suspend fun isNewsBookmarked(title: String): Boolean
+    suspend fun isNewsBookmarked(title: String): Boolean //menambahkan suspend
 }

@@ -69,3 +69,72 @@ class NewsRepository private constructor(
             }.also { instance = it }
     }
 }
+
+//class NewsRepository private constructor(
+//    private val apiService: ApiService,
+//    private val newsDao: NewsDao,
+//    private val appExecutors: AppExecutors,
+//) {
+//    private val result = MediatorLiveData<Result<List<NewsEntity>>>()
+//
+//    fun getHeadlineNews(): LiveData<Result<List<NewsEntity>>>{
+//        result.value = Result.Loading
+//        val client = apiService.getNews(BuildConfig.API_KEY)
+//        client.enqueue(object : Callback<NewsResponse>{
+//            override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
+//                result.value = Result.Error(t.message.toString())
+//            }
+//
+//            override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
+//                if (response.isSuccessful){
+//                    val articles = response.body()?.articles
+//                    val newList = ArrayList<NewsEntity>()
+//                    appExecutors.diskIO.execute {
+//                        articles?.forEach{ article ->
+//                            val isBookmarked = newsDao.isNewsBookmarked(article.title)
+//                            val news = NewsEntity(
+//                                article.title,
+//                                article.publishedAt,
+//                                article.urlToImage,
+//                                article.url,
+//                                isBookmarked
+//                            )
+//                            newList.add(news)
+//                        }
+//                        newsDao.deleteAll()
+//                        newsDao.insertNews(newList)
+//                    }
+//                }
+//            }
+//
+//        })
+//        val localData = newsDao.getNews()
+//        result.addSource(localData){ newData: List<NewsEntity>->
+//            result.value = Result.Success(newData)
+//        }
+//        return result
+//    }
+//
+//    fun getBookmarkedNews(): LiveData<List<NewsEntity>>{
+//        return newsDao.getBookmarkedNews()
+//    }
+//    fun setBookmarkedNews(news: NewsEntity, bookmarkState: Boolean){
+//        appExecutors.diskIO.execute {
+//            news.isBookmarked = bookmarkState
+//            newsDao.updateNews(news)
+//        }
+//    }
+//
+//    companion object{
+//        @Volatile
+//        private var instance: NewsRepository? = null
+//        fun getInstance(
+//            apiService: ApiService,
+//            newsDao: NewsDao,
+//            appExecutors: AppExecutors
+//        ): NewsRepository =
+//            instance ?: synchronized(this){
+//                instance ?: NewsRepository(apiService, newsDao, appExecutors)
+//            }.also { instance = it }
+//    }
+//}
